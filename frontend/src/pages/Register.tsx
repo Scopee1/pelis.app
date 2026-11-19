@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, Navigate, useNavigate } from "react-router";
 import { AuthCard } from "../components/AuthCard";
-import { GithubButton, OrDivider } from "../components/GithubButton";
+import { OrDivider, SocialButtons } from "../components/SocialButtons";
 import { Alert } from "../components/ui/Alert";
 import { FormField } from "../components/ui/FormField";
 import { useCurrentUser } from "../hooks/useCurrentUser";
@@ -48,7 +48,7 @@ export const Register = () => {
       }
     >
       {serverError && <Alert>{serverError}</Alert>}
-      <GithubButton redirectTo="/" onError={setServerError} />
+      <SocialButtons redirectTo="/" onError={setServerError} />
       <OrDivider />
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
         <FormField label="Nombre" htmlFor="name" error={errors.name?.message}>

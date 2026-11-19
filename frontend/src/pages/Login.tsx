@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, Navigate, useLocation, useNavigate, useSearchParams } from "react-router";
 import { AuthCard } from "../components/AuthCard";
-import { GithubButton, OrDivider } from "../components/GithubButton";
+import { OrDivider, SocialButtons } from "../components/SocialButtons";
 import { Alert } from "../components/ui/Alert";
 import { FormField } from "../components/ui/FormField";
 import { useCurrentUser } from "../hooks/useCurrentUser";
@@ -11,7 +11,7 @@ import { signIn } from "../lib/auth-client";
 import { translateAuthError } from "../lib/auth-errors";
 import { loginSchema, type LoginFormValues } from "../schemas/auth.schema";
 
-const OAUTH_ERROR_MESSAGE = "No se pudo iniciar sesión con GitHub. Probá de nuevo.";
+const OAUTH_ERROR_MESSAGE = "No se pudo iniciar sesión con Google o GitHub. Probá de nuevo.";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ export const Login = () => {
   return (
     <AuthCard
       title="Ingresar"
-      subtitle="Entrá con tu email o con tu cuenta de GitHub."
+      subtitle="Entrá con tu email, Google o GitHub."
       footer={
         <>
           ¿No tenés cuenta?{" "}
@@ -53,7 +53,7 @@ export const Login = () => {
       }
     >
       {serverError && <Alert>{serverError}</Alert>}
-      <GithubButton redirectTo={redirectTo} onError={setServerError} />
+      <SocialButtons redirectTo={redirectTo} onError={setServerError} />
       <OrDivider />
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
         <FormField label="Email" htmlFor="email" error={errors.email?.message}>
