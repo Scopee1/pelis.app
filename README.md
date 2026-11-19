@@ -41,7 +41,7 @@ Además Mongo agrega `_id`, `createdAt` y `updatedAt`.
 
 ## Stack
 
-- **Backend:** Node 22 · Express 5 · TypeScript · MongoDB (Atlas) + Mongoose · Zod · Better Auth (email/contraseña + GitHub, plugin `admin` para roles)
+- **Backend:** Node 22 · Express 5 · TypeScript · MongoDB (Atlas) + Mongoose · Zod · Better Auth (email/contraseña + GitHub + Google, plugin `admin` para roles)
 - **Frontend:** React 19 · Vite · TypeScript · React Router 7 · Redux Toolkit + RTK Query · React Hook Form + Zod · Tailwind CSS 4
 - **Deploy:** Render (backend como Web Service, frontend como Static Site)
 
@@ -107,14 +107,15 @@ Respuesta: `{ "data": [ ... ], "meta": { "total", "page", "limit", "totalPages" 
 |---|---|---|
 | POST | `/api/auth/sign-up/email` | público |
 | POST | `/api/auth/sign-in/email` | público |
-| POST | `/api/auth/sign-in/social` (GitHub) | público |
+| POST | `/api/auth/sign-in/social` (GitHub o Google) | público |
 | GET | `/api/auth/callback/github` | público |
+| GET | `/api/auth/callback/google` | público |
 | GET | `/api/auth/get-session` | sesión |
 | POST | `/api/auth/sign-out` | sesión |
 | GET | `/api/auth/admin/list-users` | admin |
 | POST | `/api/auth/admin/set-role` | admin |
 
-Todo usuario que se registra (por email o GitHub) recibe el rol `user`.
+Todo usuario que se registra (por email, GitHub o Google) recibe el rol `user`.
 
 ## Correrlo en local
 
@@ -138,6 +139,7 @@ npm run dev             # http://localhost:3000
 | `BETTER_AUTH_SECRET` | secreto para firmar sesiones: `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"` |
 | `BETTER_AUTH_URL` | URL pública **del front** (`http://localhost:5173` en local) |
 | `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | OAuth App de GitHub para local |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | opcional: OAuth client de Google (si faltan, el back arranca sin Google) |
 | `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` | usuario admin que crea `npm run seed` |
 | `SEED_USER_EMAIL` / `SEED_USER_PASSWORD` | usuario común que crea `npm run seed` |
 
@@ -145,6 +147,12 @@ OAuth App de GitHub para local (GitHub → Settings → Developer settings → O
 
 - Homepage URL: `http://localhost:5173`
 - Authorization callback URL: `http://localhost:5173/api/auth/callback/github`
+
+OAuth client de Google ([Google Cloud Console](https://console.cloud.google.com) → APIs & Services → Credentials → OAuth client ID → Web application). Uno solo sirve para local y producción:
+
+- Authorized JavaScript origins: `http://localhost:5173` y `https://<front>.onrender.com`
+- Authorized redirect URIs: `http://localhost:5173/api/auth/callback/google` y `https://<front>.onrender.com/api/auth/callback/google`
+- En la pantalla de consentimiento, la app tiene que estar **publicada** (no en modo Testing) para que cualquiera pueda entrar.
 
 ### 2. Frontend
 
@@ -170,7 +178,7 @@ del mismo dominio y no hace falta CORS.
 
 Variables: `NODE_ENV=production`, `NODE_VERSION=22`, `MONGODB_URI`, `BETTER_AUTH_SECRET` (uno nuevo),
 `BETTER_AUTH_URL=https://<front>.onrender.com`, y `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` de la
-OAuth App **de producción** (callback `https://<front>.onrender.com/api/auth/callback/github`).
+OAuth App **de producción** (callback `https://<front>.onrender.com/api/auth/callback/github`), y `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`.
 
 En Atlas: Network Access → `0.0.0.0/0` (las IPs de Render cambian).
 
@@ -194,7 +202,7 @@ Redirects/Rewrites, en este orden:
 - Catálogo con búsqueda por título o director, filtro por género y destacadas, orden y paginación.
   Los filtros quedan en la URL, así que F5 o compartir el link mantiene la búsqueda.
 - Detalle de cada película.
-- Registro, login con email/contraseña y con GitHub, logout. La sesión se mantiene al recargar (`useSession()`).
+- Registro, login con email/contraseña, con GitHub y con Google, logout. La sesión se mantiene al recargar (`useSession()`).
 - Panel de admin (`/admin`) con el ABM de películas, protegido por rol. Un usuario común ve "Sin permisos" y uno sin sesión va a `/login`.
 - Página de admin para cambiar roles (`/admin/users`, usa `authClient.admin.setRole`).
 - Validación con Zod en el front (React Hook Form) y en el back. Si el back rechaza un campo, el error se muestra en ese input.
@@ -203,3 +211,4 @@ Redirects/Rewrites, en este orden:
 
 - Paginación, filtros y búsqueda en el listado.
 - Página de admin para cambiar roles.
+- Login con Google, además de GitHub.
