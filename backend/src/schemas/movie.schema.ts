@@ -17,9 +17,11 @@ export const createMovieSchema = z.object({
     .min(1, "El director es obligatorio")
     .max(MOVIE_LIMITS.directorMaxLength, `El director no puede superar ${MOVIE_LIMITS.directorMaxLength} caracteres`),
   genre: genreSchema,
-  releaseDate: z.coerce
-    .date({ error: "La fecha de estreno no es válida (formato AAAA-MM-DD)" })
-    .min(new Date(MOVIE_LIMITS.earliestReleaseDate), "La fecha de estreno es demasiado antigua"),
+  // Solo strings ISO: z.coerce.date() aceptaba null o true y los convertia en 1970.
+  releaseDate: z
+    .union([z.iso.date(), z.iso.datetime()], { error: "La fecha de estreno no es válida (formato AAAA-MM-DD)" })
+    .transform((value) => new Date(value))
+    .refine((date) => date >= new Date(MOVIE_LIMITS.earliestReleaseDate), "La fecha de estreno es demasiado antigua"),
   durationMinutes: z
     .number({ error: "La duración debe ser un número" })
     .int("La duración debe ser un número entero de minutos")
