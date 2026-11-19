@@ -20,8 +20,8 @@ Trabajo práctico de Programación Web Full Stack, basado en el repositorio de l
 
 | Rol | Email | Contraseña |
 |---|---|---|
-| admin | `admin@pelis.app` | `COMPLETAR` |
-| user | `user@pelis.app` | `COMPLETAR` |
+| admin | `admin@pelis.app` | `Admin1234` |
+| user | `user@pelis.app` | `User1234` |
 
 ## La entidad: `Movie`
 
