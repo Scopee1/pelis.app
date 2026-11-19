@@ -1,0 +1,31 @@
+{
+  "name": "pelis-app-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "seed": "tsx scripts/seed.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@better-auth/mongo-adapter": "^1.7.26",
+    "better-auth": "^1.7.26",
+    "dotenv": "^17.4.2",
+    "express": "^5.3.0",
+    "mongodb": "^7.9.0",
+    "mongoose": "^9.12.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.20.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
