@@ -33,9 +33,18 @@ function usersCollection() {
   return mongoose.connection.collection("user");
 }
 
+// Si el usuario ya existe, le pisa la contraseña con la del .env: asi el README y la base no se desincronizan.
+async function resetPassword(userId: string, password: string): Promise<void> {
+  const context = await auth.$context;
+  await context.internalAdapter.updatePassword(userId, await context.password.hash(password));
+}
+
 async function ensureUser({ name, email, password, role }: SeedUser): Promise<void> {
   const existing = await usersCollection().findOne({ email });
-  if (!existing) {
+  if (existing) {
+    await resetPassword(existing._id.toString(), password);
+    console.log(`[seed] ${email} already existed, password updated`);
+  } else {
     await auth.api.signUpEmail({ body: { name, email, password } });
     console.log(`[seed] created ${email}`);
   }
