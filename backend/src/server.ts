@@ -27,7 +27,7 @@ app.use("/api", (_req: Request, res: Response) => {
 
 app.use((error: unknown, _req: Request, res: Response, _next: NextFunction) => {
   if (error instanceof SyntaxError && "body" in error) {
-    sendError(res, 400, "El body no es un JSON valido");
+    sendError(res, 400, "El body no es un JSON válido");
     return;
   }
   console.error("[server] unhandled error:", error);

@@ -13,7 +13,7 @@ export function validateBody(schema: ZodType) {
     const result = schema.safeParse(req.body ?? {});
 
     if (!result.success) {
-      sendValidationError(res, "Los datos enviados no son validos", result.error);
+      sendValidationError(res, "Los datos enviados no son válidos", result.error);
       return;
     }
 
@@ -28,7 +28,7 @@ export function validateQuery(schema: ZodType) {
     const result = schema.safeParse(req.query);
 
     if (!result.success) {
-      sendValidationError(res, "Los filtros enviados no son validos", result.error);
+      sendValidationError(res, "Los filtros enviados no son válidos", result.error);
       return;
     }
 

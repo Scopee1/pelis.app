@@ -9,7 +9,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     const session = await auth.api.getSession({ headers: fromNodeHeaders(req.headers) });
 
     if (!session) {
-      sendError(res, 401, "Sesion requerida");
+      sendError(res, 401, "Sesión requerida");
       return;
     }
 
@@ -17,7 +17,7 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
     next();
   } catch (error) {
     console.error("[auth] error reading session:", error);
-    sendError(res, 500, "No se pudo verificar la sesion");
+    sendError(res, 500, "No se pudo verificar la sesión");
   }
 }
 
@@ -25,12 +25,12 @@ export async function authMiddleware(req: Request, res: Response, next: NextFunc
 export function requireRole(...allowedRoles: UserRole[]) {
   return (req: Request, res: Response, next: NextFunction): void => {
     if (!req.user) {
-      sendError(res, 401, "Sesion requerida");
+      sendError(res, 401, "Sesión requerida");
       return;
     }
 
     if (!allowedRoles.includes(req.user.role as UserRole)) {
-      sendError(res, 403, "No tenes permisos para realizar esta accion");
+      sendError(res, 403, "No tenés permisos para realizar esta acción");
       return;
     }
 
