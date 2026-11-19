@@ -11,8 +11,8 @@ Trabajo práctico de Programación Web Full Stack, basado en el repositorio de l
 
 | | URL |
 |---|---|
-| Frontend (Render Static Site) | https://COMPLETAR.onrender.com |
-| Backend (Render Web Service) | https://COMPLETAR.onrender.com |
+| Frontend (Render Static Site) | https://pelis-app-v5d0.onrender.com |
+| Backend (Render Web Service) | https://pelis-app-api.onrender.com |
 
 > El backend está en el plan free de Render: si estuvo sin uso, el primer request tarda ~50 segundos.
 
